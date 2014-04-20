@@ -41,24 +41,48 @@ class BankSimulator {
 
     Scanner userParameter = new Scanner(System.in);
 
-    System.out.println("Enter simulation time (positive integer)       : ");
+    System.out.print("Enter simulation time (positive integer)       : ");
     simulationTime = userParameter.nextInt();
 
-    System.out.println("Enter maximum transaction time of customers    : ");
+    System.out.print("Enter maximum transaction time of customers    : ");
     maxTransactionTime = userParameter.nextInt();
 
-    System.out.println("enter chances (0% < & <= 100%) of new customer : ");
+    System.out.print("enter chances (0% < & <= 100%) of new customer : ");
     chancesOfArrival = userParameter.nextInt();
 
-    System.out.println("Enter the number of tellers                    : ");
+    System.out.print("Enter the number of tellers                    : ");
     numTellers = userParameter.nextInt();
 
-    System.out.println("Enter customer queue limit                     : ");
+    System.out.print("Enter customer queue limit                     : ");
     customerQLimit = userParameter.nextInt();
 
-    System.out.println("Enter 1/0 to get data from file/Random         : ");
+    System.out.print("Enter 1/0 to get data from file/Random         : ");
     dataSource = userParameter.nextInt();
+    
+    switch(dataSource){
+      case 1:
 
+      System.out.print("Enter filename                                 : ");
+    
+      String fileName = userParameter.nextLine.trim(); // here the user will type the file name
+
+       //if file ain't ther
+      try{
+              File file = new File(fileName);
+              dataFile = new Scanner(file);
+              //System.out.println(dataFile.nextLine());
+          }
+            catch (FileNotFoundException e ) {
+              e.printStackTrace();
+            }
+          
+            break;
+          default:
+            break;
+        }
+
+    }
+    
     System.out.println("Enter filename                                 : ");
     
         Scanner fileOrRandom = new Scanner(System.in);
