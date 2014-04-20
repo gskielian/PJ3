@@ -3,7 +3,7 @@ package PJ3;
 import java.util.*;
 import java.io.*;
 
-// You may add new functions or data in this class 
+// You may add new functions or data in this class
 // You may modify any functions or data members here
 // You must use Customer, Teller and ServiceArea
 // to implement your simulator
@@ -25,19 +25,23 @@ class BankSimulator {
   private Random dataRandom;	   // get customer data using random function
 
   // most recent customer arrival info, see getCustomerData()
-  private boolean anyNewArrival;  
+  private boolean anyNewArrival;
   private int transactionTime;
 
   // initialize data fields
   private BankSimulator()
   {
-	// add statements
+    numGoaway=0;
+    numServed=0;
+    totalWaitingTime=0;
+
+    // add statements
   }
 
   private void setupParameters()
   {
-  	// rehad input parameters
-	// setup dataFile or dataRandom
+    // rehad input parameters
+    // setup dataFile or dataRandom
 
     Scanner userParameter = new Scanner(System.in);
 
@@ -58,125 +62,105 @@ class BankSimulator {
 
     System.out.print("Enter 1/0 to get data from file/Random         : ");
     dataSource = userParameter.nextInt();
-    
+
+    String fileName = userParameter.nextLine(); // a hack to get rid of the lingering newline
+
     switch(dataSource){
+      case 0:
+        System.out.println("Getting Random File Data");
+        break;
       case 1:
 
-      System.out.print("Enter filename                                 : ");
-    
-      String fileName = userParameter.nextLine.trim(); // here the user will type the file name
+        System.out.print("Enter filename                                 : ");
 
-       //if file ain't ther
-      try{
-              File file = new File(fileName);
-              dataFile = new Scanner(file);
-              //System.out.println(dataFile.nextLine());
-          }
-            catch (FileNotFoundException e ) {
-              e.printStackTrace();
-            }
-          
-            break;
-          default:
-            break;
+        fileName = userParameter.nextLine().trim(); // here the user will type the file name
+
+        //in case the file ain't there, we catch the error
+        try{
+          File file = new File(fileName);
+          dataFile = new Scanner(file);
+          //System.out.println(dataFile.nextLine());
+        }
+        catch (FileNotFoundException e ) {
+          e.printStackTrace();
         }
 
+        break;
+      default:
+        break;
     }
-    
-    System.out.println("Enter filename                                 : ");
-    
-        Scanner fileOrRandom = new Scanner(System.in);
-        int decision = fileOrRandom.nextInt();
-        Scanner dataFile;
-        switch(decision) {
-          case 0:
-            System.out.println("Getting Random Data");
-            break;
-          case 1:
-            Scanner nameOfFile = new Scanner(System.in);
-            String fileName = nameOfFile.nextLine().trim();
-        
-            try{
-              File file = new File(fileName);
-              dataFile = new Scanner(file);
-              System.out.println(dataFile.nextLine());
-            }
-            catch (FileNotFoundException e ) {
-              e.printStackTrace();
-            }
 
-          default:
-            break;
-        }
-	// add statements
+
+    // add statements
 
   }
 
   private void getCustomerData()
   {
-      if (dataFile.hasNextLine()){
-        String line = dataFile.nextLine();
-        String[] parts = String.split("-");
-        transactionTime = parts[0];
-        System.out.println(line);
-        anyNewArrival = true;
-      }
-      else{
-        anyNewArrival = false;
-      }
+    if (dataFile.hasNextLine()){
+      String line = dataFile.nextLine();
+      String[] parts = line.split(" ");
+      transactionTime = Integer.parseInt(parts[0]);
+      System.out.println(line); // just for debugging purposes
+      anyNewArrival = true;
+    }
+    else{
+      anyNewArrival = false;
+    }
 
 
-      dataFile.close();
-      
-	// get next customer data : from file or random number generator
-        // set anyNewArrival and transactionTime
-	// add statements
+    dataFile.close();
+
+    // get next customer data : from file or random number generator
+    // set anyNewArrival and transactionTime
+    // add statements
   }
 
   private void doSimulation()
   {
-	// add statements
+    // add statements
 
-	// Initialize ServiceArea
+    // Initialize ServiceArea
+    
 
-	// Time driver simulation loop
-  	for (int currentTime = 0; currentTime < simulationTime; currentTime++) {
+    // Time driver simulation loop
+    for (int currentTime = 0; currentTime < simulationTime; currentTime++) {
 
-    		// Step 1: any new customer enters the bank?
-    		getCustomerData();
+      // Step 1: any new customer enters the bank?
+      getCustomerData();
 
-    		if (anyNewArrival) {
+      if (anyNewArrival) {
 
-      		    // Step 1.1: setup customer data
-      		    // Step 1.2: check customer waiting queue too long?
-    		} else {
-      		    System.out.println("\tNo new customer!");
-    		}
+        // Step 1.1: setup customer data
+        // Step 1.2: check customer waiting queue too long?
+      } else {
+        System.out.println("\tNo new customer!");
+      }
 
-    		// Step 2: free busy tellers, add to free tellerQ
+      // Step 2: free busy tellers, add to free tellerQ
 
-    		// Step 3: get free tellers to serve waiting customers 
+      // Step 3: get free tellers to serve waiting customers
 
-  	} // end simulation loop
+    } // end simulation loop
 
-  	// clean-up
+    // clean-up
   }
 
   private void printStatistics()
   {
-	// add statements into this method!
-	// print out simulation results
-	// see the given example in project statement
-        // you need to display all free and busy tellers
+    // add statements into this method!
+    // print out simulation results
+    // see the given example in project statement
+    // you need to display all free and busy tellers
   }
 
   // *** main method to run simulation ****
 
   public static void main(String[] args) {
-   	BankSimulator runBankSimulator=new BankSimulator();
-   	runBankSimulator.setupParameters();
-   	runBankSimulator.doSimulation();
-   	runBankSimulator.printStatistics();
+    BankSimulator runBankSimulator=new BankSimulator();
+    runBankSimulator.setupParameters(); // done
+    runBankSimulator.doSimulation();
+    runBankSimulator.printStatistics();
   }
 
 }

@@ -4,20 +4,20 @@ import java.util.*;
 
 //--------------------------------------------------------------------------
 //
-// Define simulation queues in a service area. Queues hold references to Customer 
+// Define simulation queues in a service area. Queues hold references to Customer
 // and Teller objects
 //
 // Customer (FIFO) queue is used to hold waiting customers. If the queue is too long
 // (i.e. >  customerQLimnit), customer goes away without entering customer queue
 //
-// There are several tellers in a service area. Use PriorityQueue to 
-// hold BUSY tellers and FIFO queue to hold FREE tellers, 
+// There are several tellers in a service area. Use PriorityQueue to
+// hold BUSY tellers and FIFO queue to hold FREE tellers,
 // i.e. a teller that is FREE for the longest time should start be used first.
 //
-// To handle teller in PriorityQueue, we need to define comparator 
+// To handle teller in PriorityQueue, we need to define comparator
 // for comparing 2 teller objects. Here is a constructor from Java API:
 //
-// 	PriorityQueue(int initialCapacity, Comparator<? super E> comparator) 
+// 	PriorityQueue(int initialCapacity, Comparator<? super E> comparator)
 //
 // For priority queue, the default compare function is "natural ordering"
 // i.e. for numbers, minimum value is returned first
@@ -30,17 +30,17 @@ import java.util.*;
 class CompareTeller implements Comparator<Teller>{
 	// overide compare() method
  	public int compare(Teller o1, Teller o2) {
-		return o1.getEndBusyIntervalTime() - o2.getEndBusyIntervalTime(); 
+		return o1.getEndBusyIntervalTime() - o2.getEndBusyIntervalTime();
 	}
 }
 
 // DO NOT ADD NEW METHODS OR DATA FIELDS
 class ServiceArea {
 
-  
+
   // Private data fields:
-  
-  // define one priority queue 
+
+  // define one priority queue
   private PriorityQueue <Teller> busyTellerQ;
 
   // define two FIFO queues
@@ -51,24 +51,24 @@ class ServiceArea {
   private int customerQLimit;
 
 
-  // Constructor 
-  public ServiceArea() 
+  // Constructor
+  public ServiceArea()
   {
-	// add statements
+
   }
 
-  // Constructor 
+  // Constructor
   public ServiceArea(int numTellers, int customerQlimit, int startTellerID)
   {
 	// use ArrayDeque to construct FIFO queue objects
-
 	// construct PriorityQueue object
  	// overide compare() in Comparator to compare Teller objects
-	busyTellerQ= new PriorityQueue<Teller>( numTellers, 
-						new CompareTeller()); 
+	busyTellerQ= new PriorityQueue<Teller>( numTellers, new CompareTeller());
 
-	// initialize customerQlimit
+	// initialize customerQLimit
+         this.customerQLimit = customerQlimit;
         // Construct Teller objects and insert into FreeTellerQ
+        
 
 	// add statements
   }
@@ -80,7 +80,7 @@ class ServiceArea {
 	return null;
   }
 
-  public Teller removeBusyTellerQ() 
+  public Teller removeBusyTellerQ()
   {
 	// remove and return a busy teller
 	// Add statetments
@@ -89,7 +89,7 @@ class ServiceArea {
 
   public Customer removeCustomerQ()
   {
-	// remove and return a customer 
+	// remove and return a customer
 	// Add statetments
 	return null;
   }
@@ -108,7 +108,7 @@ class ServiceArea {
 
   public void insertCustomerQ(Customer customer)
   {
-	// insert a customer 
+	// insert a customer
 	// Add statetments
   }
 
@@ -149,12 +149,12 @@ class ServiceArea {
 
   public int numWaitingCustomers()
   {
-	// get number of customers 
+	// get number of customers
 	// Add statetments
 	return 0;
   }
 
-  public Teller getFrontBusyTellerQ() 
+  public Teller getFrontBusyTellerQ()
   {
 	// get front of busy tellers
 	// "retrieve" but not "remove"

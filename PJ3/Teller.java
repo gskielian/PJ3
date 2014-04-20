@@ -8,7 +8,7 @@ class Teller {
    private int startTime;
    private int endTime;
 
-   // teller id and current customer which is served by this teller 
+   // teller id and current customer which is served by this teller
    private int tellerID;
    private Customer currentCustomer;
 
@@ -20,77 +20,105 @@ class Teller {
    // Constructor
    Teller()
    {
-	// add statements
+     //when constructed they should have zeros for these statistics
+     tellerID=0;
+     totalFreeTime=0;
+     totalBusyTime=0;
+     totalCustomers=0;
    }
 
 
    // Constructor with teller id
    Teller(int tellerId)
    {
+     this.tellerID= tellerId;
+     totalFreeTime=0;
+     totalBusyTime=0;
+     totalCustomers=0;
 	// add statements
    }
 
    // accessor methods
 
-   int getTellerID () 
+   int getTellerID ()
    {
 	return tellerID;
    }
 
-   Customer getCustomer() 
+   Customer getCustomer()
    {
 	// add statements
-	return null;
+	return currentCustomer;
    }
 
    // need this to setup priority queue
-   int getEndBusyIntervalTime() 
+   int getEndBusyIntervalTime()
    {
         // return end time of busy interval
 	// add statements
-	return 0; 
+
+	return endTime;
    }
 
    // functions for state transition
    // FREE -> BUSY :
    void freeToBusy (Customer currentCustomer, int currentTime)
    {
+
   	// Main goal  : switch from free interval to busy interval
   	//
   	// end free interval, start busy interval
   	// steps	: update totalFreeTime
-  	// 		  set startTime, endTime, currentCustomer, 
-  	// 		  update totalCustomers
+         endTime = currentTime;
+         totalFreeTime += (endTime - startTime);
 
-	// add statements
+         //set startTime, endTime, currentCustomer,
+         //start new interval
+         startTime = currentTime + 1; //TODO ¿Or is it currentTime?
+         endTime = currentCustomer.getTransactionTime() + startTime;
+         this.currentCustomer = currentCustomer;
+
+         //update totalCustomers
+         totalCustomers++;
+
+         // add statements
    }
 
    // BUSY -> FREE :
    Customer busyToFree ()
    {
    	// Main goal : switch from busy interval to free interval
-   	// 
-  	// steps     : update totalBusyTime 
-  	// 	       set startTime 
+   	//
+  	// steps     : update totalBusyTime
+        totalBusyTime += (endTime - startTime);
+  	// 	       set startTime
+        startTime = endTime + 1;//TODO see if this works
   	//             return currentCustomer
-
-	// add statements
-  	return null;
+        return currentCustomer;
    }
 
    // need this method at the end of simulation to update teller data
-   void setEndIntervalTime (int endsimulationtime, int intervalType)
+   void setEndIntervalTime (int endsimulationtime, int intervalType) //TODO check in after done
    {
   	// for end of simulation
-  	// set endTime, 
+  	// set endTime,
+        endTime = endsimulationtime;
   	// for FREE interval, update totalFreeTime
+        if ( startTime >= endTime ) {
+          //then we were free
+          //update totalFreeTime
+          totalFreeTime += (endsimulationtime - startTime);
+        }
+        else {
   	// for BUSY interval, update totalBusyTime
+          //we were busy
+          totalBusyTime += (endsimulationtime - startTime);
+        }
 
-	// add statements
    }
 
    // functions for printing statistics :
-   void printStatistics () 
+   void printStatistics ()
    {
   	// print teller statistics, see project statement
 
