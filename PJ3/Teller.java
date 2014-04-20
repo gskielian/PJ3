@@ -74,7 +74,7 @@ class Teller {
 
          //set startTime, endTime, currentCustomer,
          //start new interval
-         startTime = currentTime + 1; //TODO ¿Or is it currentTime?
+         startTime = currentTime; //TODO ¿Or is it +1?
          endTime = currentCustomer.getTransactionTime() + startTime;
          this.currentCustomer = currentCustomer;
 
@@ -92,7 +92,7 @@ class Teller {
   	// steps     : update totalBusyTime
         totalBusyTime += (endTime - startTime);
   	// 	       set startTime
-        startTime = endTime + 1;//TODO see if this works
+        startTime = endTime;//TODO see if this works or if + 1
   	//             return currentCustomer
         return currentCustomer;
    }
