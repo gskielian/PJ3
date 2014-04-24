@@ -8,7 +8,7 @@ import java.util.*;
 // and Teller objects
 //
 // Customer (FIFO) queue is used to hold waiting customers. If the queue is too long
-// (i.e. >  customerQLimnit), customer goes away without entering customer queue
+// (i.e. >  customerQLimit), customer goes away without entering customer queue
 //
 // There are several tellers in a service area. Use PriorityQueue to
 // hold BUSY tellers and FIFO queue to hold FREE tellers,
@@ -44,8 +44,8 @@ class ServiceArea {
   private PriorityQueue <Teller> busyTellerQ;
 
   // define two FIFO queues
-  private Queue<Customer> customerQ;
-  private Queue<Teller> freeTellerQ;
+  private ArrayDeque<Customer> customerQ;
+  private ArrayDeque<Teller> freeTellerQ;
 
   // define customer queue limit
   private int customerQLimit;
@@ -61,112 +61,106 @@ class ServiceArea {
   public ServiceArea(int numTellers, int customerQlimit, int startTellerID)
   {
 	// use ArrayDeque to construct FIFO queue objects
-	// construct PriorityQueue object
- 	// overide compare() in Comparator to compare Teller objects
-	busyTellerQ= new PriorityQueue<Teller>( numTellers, new CompareTeller());
+        this.customerQLimit = customerQlimit;
 
-	// initialize customerQLimit
-         this.customerQLimit = customerQlimit;
+        customerQ = new ArrayDeque<Customer>(customerQLimit);
+        freeTellerQ = new ArrayDeque<Teller>(numTellers);
+
         // Construct Teller objects and insert into FreeTellerQ
-        
-
+        int i;
+        for ( i = 0; i < numTellers;  i++) {
+          freeTellerQ.add(new Teller(startTellerID + i));
+        }
+	// construct PriorityQueue object
+        // override compare() in Comparator to compare Teller objects
+	busyTellerQ = new PriorityQueue<Teller>( numTellers, new CompareTeller());
+        // initialize customerQLimit
 	// add statements
   }
 
   public Teller removeFreeTellerQ()
   {
 	// remove and return a free teller
-	// Add statetments
-	return null;
+        return freeTellerQ.pollFirst(); // removes teller from front and returns said teller
   }
 
   public Teller removeBusyTellerQ()
   {
 	// remove and return a busy teller
-	// Add statetments
-	return null;
+	return busyTellerQ.poll(); //this returns a busyteller or null if nothing is there
   }
 
   public Customer removeCustomerQ()
   {
 	// remove and return a customer
-	// Add statetments
-	return null;
+	return customerQ.pollFirst(); // first come first out-of-line
   }
 
   public void insertFreeTellerQ(Teller teller)
   {
 	// insert a free teller
-	// Add statetments
+        freeTellerQ.addLast(teller);
   }
 
   public void insertBusyTellerQ(Teller teller)
   {
 	// insert a busy teller
-	// Add statetments
+        busyTellerQ.add(teller);
   }
 
   public void insertCustomerQ(Customer customer)
   {
 	// insert a customer
-	// Add statetments
+        customerQ.addLast(customer);
   }
 
   public boolean emptyFreeTellerQ()
   {
 	// is freeTellerQ empty?
-	// Add statetments
-	return false;
+	return freeTellerQ.isEmpty();
   }
 
   public boolean emptyBusyTellerQ()
   {
 	// is busyTellerQ empty?
-	// Add statetments
-	return false;
+	return busyTellerQ.isEmpty();
   }
 
   public boolean emptyCustomerQ()
   {
 	// is customerQ empty?
-	// Add statetments
-	return false;
+	return customerQ.isEmpty();
   }
 
   public int numFreeTellers()
   {
 	// get number of free tellers
-	// Add statetments
-	return 0;
+	return freeTellerQ.size();
   }
 
   public int numBusyTellers()
   {
 	// get number of busy tellers
-	// Add statetments
-	return 0;
+	return busyTellerQ.size();
   }
 
   public int numWaitingCustomers()
   {
 	// get number of customers
-	// Add statetments
-	return 0;
+	return customerQ.size();
   }
 
   public Teller getFrontBusyTellerQ()
   {
 	// get front of busy tellers
 	// "retrieve" but not "remove"
-	// Add statetments
-	return null;
+	return busyTellerQ.peek();
   }
 
   public boolean isCustomerQTooLong()
   {
 	// is customerQ too long?
-	// Add statetments
-	return false;
+	return (customerQ.size() == customerQLimit); //tests if line is maxed
   }
 
   public void printStatistics()

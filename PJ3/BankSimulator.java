@@ -34,8 +34,6 @@ class BankSimulator {
     numGoaway=0;
     numServed=0;
     totalWaitingTime=0;
-
-    // add statements
   }
 
   private void setupParameters()
@@ -65,7 +63,7 @@ class BankSimulator {
 
     String fileName = userParameter.nextLine(); // a hack to get rid of the lingering newline
 
-    switch(dataSource){
+    switch(dataSource) {
       case 0:
         System.out.println("Getting Random File Data");
         break;
@@ -79,7 +77,6 @@ class BankSimulator {
         try{
           File file = new File(fileName);
           dataFile = new Scanner(file);
-          //System.out.println(dataFile.nextLine());
         }
         catch (FileNotFoundException e ) {
           e.printStackTrace();
@@ -91,12 +88,12 @@ class BankSimulator {
     }
 
 
-    // add statements
 
   }
 
   private void getCustomerData()
   {
+
     if (dataFile.hasNextLine()){
       String line = dataFile.nextLine();
       String[] parts = line.split(" ");
@@ -118,26 +115,40 @@ class BankSimulator {
 
   private void doSimulation()
   {
-    // add statements
 
     // Initialize ServiceArea
-    
+    servicearea = new ServiceArea(numTellers, customerQLimit, 1001);
+
 
     // Time driver simulation loop
     for (int currentTime = 0; currentTime < simulationTime; currentTime++) {
 
       // Step 1: any new customer enters the bank?
-      getCustomerData();
+      getCustomerData(); // sets anyNewArrival to true or false
 
       if (anyNewArrival) {
 
         // Step 1.1: setup customer data
+        Customer customer = new Customer(customerIDCounter, transactionTime, currentTime); //customer id, transactionTime, currentTime
+        customerIDCounter++; // increment the customerIDCounter
+
         // Step 1.2: check customer waiting queue too long?
+        if (!servicearea.isCustomerQTooLong()) {
+          servicearea.insertCustomerQ(customer);
+        } else {
+          System.out.println("\tLine is too long");
+        }
       } else {
-        System.out.println("\tNo new customer!");
+        System.out.println("\tNo new arrivals");
       }
 
       // Step 2: free busy tellers, add to free tellerQ
+      
+      if (servicearea.getFrontBusyTellerQ().getEndBusyIntervalTime() == currentTime) {
+       servicearea.insertFreeTellerQ( servicearea.removeBusyTellerQ() );
+        
+
+      
 
       // Step 3: get free tellers to serve waiting customers
 
